@@ -243,21 +243,29 @@ function build_species_list(statement_vector::Array{VFFSentence})
   species_set::Set{AbstractString} = Set{AbstractString}()
   for vff_sentence in statement_vector
 
-    # grab the reactant and prodict strings -
-    reactant_string = vff_sentence.sentence_reactant_clause
-    product_string = vff_sentence.sentence_product_clause
+    @show vff_sentence
 
-    # build the sets -
-    reactant_set = build_species_set_from_clause(reactant_string)
-    product_set = build_species_set_from_clause(product_string)
+    # grab the handler -
+    handler_symbol = vff_sentence.sentence_handler
+    if (handler_symbol == :metabolic_reaction_handler)
 
-    # add these to the species_set -
-    for item in reactant_set
-      push!(species_set,item)
-    end
+      # grab the reactant and prodict strings -
+      reactant_string = vff_sentence.sentence_reactant_clause
+      product_string = vff_sentence.sentence_product_clause
 
-    for item in product_set
-      push!(species_set,item)
+      # build the sets -
+      reactant_set = build_species_set_from_clause(reactant_string)
+      product_set = build_species_set_from_clause(product_string)
+
+      # add these to the species_set -
+      for item in reactant_set
+        push!(species_set,item)
+      end
+
+      for item in product_set
+        push!(species_set,item)
+      end
+
     end
   end
 
@@ -284,13 +292,7 @@ function build_species_list(statement_vector::Array{VFFSentence})
     species_object.species_index = index
     species_object.stoichiometric_coefficient = 0.0
     species_object.species_type = :metabolite
-
-    # TODO: This should be updated to be user configurable ...
-    if (is_species_balanced(species_symbol) == true)
-      species_object.species_compartment = :balanced
-    else
-      species_object.species_compartment = :unbalanced
-    end
+    species_object.species_compartment = :unbalanced
 
     # push -
     push!(list_of_species,species_object)

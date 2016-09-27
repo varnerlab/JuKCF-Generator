@@ -1,0 +1,12 @@
+// Test model for the JuKCF-Generator -
+
+// --------------------------------------------------------------------- //
+// Metabolic reactions -
+#pragma::metabolic_reaction_handler
+//
+// Record:
+// name (unique),{1|0},reactant_string,product_string,reverse,forward
+// --------------------------------------------------------------------- //
+reaction_1,1,A,B,-inf,inf
+reaction_2,1,A,C,0,inf
+reaction_3,1,C,B,0,inf

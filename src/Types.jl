@@ -9,6 +9,7 @@ type VFFSentence
   sentence_reverse_bound::Float64
   sentence_forward_bound::Float64
   sentence_delimiter::Char
+  sentence_handler::Symbol
 
   function VFFSentence()
     this = new()

@@ -18,34 +18,53 @@ function parse_vff_file(path_to_model_file::AbstractString)
       end
     end
 
+    handler_symbol::Symbol = :metabolic_reaction_handler
     for sentence in tmp_array
 
       # check for #pragma -
-      
+      if (contains(sentence,"#pragma") == true)
 
-      # Ok, so now we have the array for sentences -
-      vff_sentence = VFFSentence()
-      vff_sentence.original_sentence = sentence
+        # split the sentence -
+        split_array = split(sentence,"::")
 
-      # split the sentence -
-      split_array = split(sentence,",")
+        @show split_array
 
-      # sentence_name::AbstractString
-      # sentence_reactant_clause::AbstractString
-      # sentence_product_clause::AbstractString
-      # sentence_reverse_bound::Float64
-      # sentence_forward_bound::Float64
-      # sentence_delimiter::Char
-      vff_sentence.sentence_name = split_array[1]
-      vff_sentence.sentence_type_flag = parse(Int,split_array[2])
-      vff_sentence.sentence_reactant_clause = split_array[3]
-      vff_sentence.sentence_product_clause = split_array[4]
-      vff_sentence.sentence_reverse_bound = parse(Float64,split_array[5])
-      vff_sentence.sentence_forward_bound = parse(Float64,split_array[6])
-      vff_sentence.sentence_delimiter = ','
+        # grab handler -
+        handler_string = split_array[2]
+        if (handler_string == "metabolic_reaction_handler")
+          handler_symbol = :metabolic_reaction_handler
+        elseif (handler_string == "control_statement_handler")
+          handler_symbol = :control_statement_handler
+        end
 
-      # add sentence to sentence_vector =
-      push!(sentence_vector,vff_sentence)
+      else
+
+        # Ok, so now we have the array for sentences -
+        vff_sentence = VFFSentence()
+        vff_sentence.original_sentence = sentence
+
+        # split the sentence -
+        split_array = split(sentence,",")
+
+        # sentence_name::AbstractString
+        # sentence_reactant_clause::AbstractString
+        # sentence_product_clause::AbstractString
+        # sentence_reverse_bound::Float64
+        # sentence_forward_bound::Float64
+        # sentence_delimiter::Char
+        vff_sentence.sentence_name = split_array[1]
+        vff_sentence.sentence_type_flag = parse(Int,split_array[2])
+        vff_sentence.sentence_reactant_clause = split_array[3]
+        vff_sentence.sentence_product_clause = split_array[4]
+        vff_sentence.sentence_reverse_bound = parse(Float64,split_array[5])
+        vff_sentence.sentence_forward_bound = parse(Float64,split_array[6])
+        vff_sentence.sentence_handler = handler_symbol
+        vff_sentence.sentence_delimiter = ','
+
+        # add sentence to sentence_vector -
+        push!(sentence_vector,vff_sentence)
+
+      end
     end
 
     # Convert all reversible reactions into 0,inf pairs -
@@ -57,11 +76,14 @@ function parse_vff_file(path_to_model_file::AbstractString)
         # first change lower bound to 0 -
         sentence.sentence_reverse_bound = 0.0
 
+
         # create a new copy of sentence -
         sentence_copy = copy(sentence)
         sentence_copy.sentence_name = (sentence_copy.sentence_name)*"_reverse"
         sentence_copy.sentence_reactant_clause = sentence.sentence_product_clause
         sentence_copy.sentence_product_clause = sentence.sentence_reactant_clause
+        sentence_copy.sentence_handler = sentence.sentence_handler
+        sentence_copy.sentence_type_flag = sentence.sentence_type_flag
 
         # add sentence and sentence copy to the expanded_sentence_vector -
         push!(expanded_sentence_vector,sentence)
