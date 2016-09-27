@@ -201,12 +201,7 @@ function build_species_list!(reaction_clause::AbstractString,list_of_species::Ar
         species_object.species_type = :metabolite
         species_object.species_symbol = symbol
         species_object.stoichiometric_coefficient = parse(Float64,coefficient)
-
-        if (is_species_balanced(symbol) == true)
-          species_object.species_compartment = :balanced
-        else
-          species_object.species_compartment = :unbalanced
-        end
+        species_object.species_compartment = :unbalanced
 
         # add to list -
         push!(list_of_species,species_object)
@@ -223,13 +218,7 @@ function build_species_list!(reaction_clause::AbstractString,list_of_species::Ar
         species_object.species_type = :metabolite
         species_object.species_symbol = symbol
         species_object.stoichiometric_coefficient = coefficient
-
-        # Compartment?
-        if (is_species_balanced(symbol) == true)
-          species_object.species_compartment = :balanced
-        else
-          species_object.species_compartment = :unbalanced
-        end
+        species_object.species_compartment = :unbalanced
 
         # add to list -
         push!(list_of_species,species_object)

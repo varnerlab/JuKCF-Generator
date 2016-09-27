@@ -208,8 +208,8 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
   buffer *= "function kinetic_flux_array = calculate_flux_array(t,x,data_dictionary)\n"
   buffer *= "\n"
   buffer *= "\t% Get data from the data_dictionary - \n"
-  buffer *= "\trate_constant_array = data_dictionary.rate_constant_array\n"
-  buffer *= "\tsaturation_constant_array = data_dictionary.saturation_constant_array\n"
+  buffer *= "\trate_constant_array = data_dictionary.rate_constant_array;\n"
+  buffer *= "\tsaturation_constant_array = data_dictionary.saturation_constant_array;\n"
   buffer *= "\n"
   buffer *= "\t% Alias the species array (helps with debuging) - \n"
 
@@ -222,18 +222,19 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
     species_symbol = species_object.species_symbol
 
     # Write the line -
-    buffer *= "\t$(species_symbol) = x($(index))\n"
+    buffer *= "\t$(species_symbol) = x($(index));\n"
   end
   buffer *= "\n"
 
   buffer *= "\t% Write the kinetics functions - \n"
-  buffer *= "\tkinetic_flux_array = []\n"
+  buffer *= "\tkinetic_flux_array = [];\n"
   buffer *= "\n"
 
   # extract the list of metabolic reactions -
   saturation_constant_counter = 1
   list_of_reactions::Array{ReactionObject} = problem_object.list_of_reactions
   list_of_metabolic_reactions::Array{ReactionObject} = extract_metabolic_reactions(list_of_reactions)
+
   counter = 1
   for (index,reaction_object::ReactionObject) in enumerate(list_of_metabolic_reactions)
 
@@ -249,9 +250,9 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
     buffer *= "\t% $(index) $(comment_string)\n"
 
     if (enyzme_generation_flag == 0)
-      buffer *= "\tflux = rate_constant_array($(index));"
+      buffer *= "\tflux = rate_constant_array($(index))"
     else
-      buffer *= "\tflux = rate_constant_array($(index))*(E_$(reaction_name));"
+      buffer *= "\tflux = rate_constant_array($(index))*(E_$(reaction_name))"
     end
 
     # ok, get the list of reactants -
@@ -267,7 +268,7 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
     end
 
     # push -
-    buffer *= "\n"
+    buffer *= ";\n"
     buffer *= "\tkinetic_flux_array = [kinetic_flux_array ; flux];\n"
     buffer *= "\n"
 
@@ -303,7 +304,7 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
     end
 
     # push -
-    buffer *= "\n"
+    buffer *= ";\n"
     buffer *= "\tkinetic_flux_array = [kinetic_flux_array ; flux];\n"
     buffer *= "\n"
   end
