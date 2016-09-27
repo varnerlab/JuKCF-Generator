@@ -1,6 +1,6 @@
 % ----------------------------------------------------------------------------------- %
 % Copyright (c) 2016 Varnerlab
-% Robert Frederick School of Chemical and Biomolecular Engineering
+% Robert Frederick Smith School of Chemical and Biomolecular Engineering
 % Cornell University, Ithaca NY 14850
 %
 % Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,38 +21,39 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 % THE SOFTWARE.
 % ----------------------------------------------------------------------------------- %
-%
+#
 % ----------------------------------------------------------------------------------- %
-% Balances: Evaluates model equations given time, state and the data_dictionary.
-% Type: GRN-JULIA
-% Version: 1.0
+% Function: Kinetics
+% Description: Calculate the flux array at time t
+% Generated on: 2016-09-27T17:30:31.674
 %
 % Input arguments:
-% t  - current time
-% x  - state array
-% data_dictionary  - Data dictionary instance (holds model parameters)
+% t::Float64 => Current time value (scalar) 
+% x::Array{Float64,1} => State array (number_of_species x 1) 
+% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
 %
-% Return arguments:
-% dxdt - derivative array at current time step
+% Output arguments:
+% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t 
 % ----------------------------------------------------------------------------------- %
-function dxdt = Balances(x,t,data_dictionary)
+function dilution_array = Dilution(t,time_step_index,x,volume,data_dictionary)
 
-  % Get the stoichiometric_matrix -
-  stoichiometric_matrix = data_dictionary.stoichiometric_matrix;
+  # How many species do we have?
+  number_of_species = length(x);
 
-  % Call the kinetics function -
-  rate_array = Kinetics(t,x,data_dictionary);
+  % Get flow rate array et al from the data_dictionary -
+  flowrate_array = data_dictionary.volumetric_flowrate_array;
+  feed_composition_array = data_dictionary.material_feed_concentration_array;
 
-  % Call the control function -
-  control_array = Control(t,x,rate_array,data_dictionary);
+  % What is the current dilution rate?
+  flow_rate = flowrate_array[time_step_index];
+  dilution_rate =(flow_rate)/(volume);
 
-  % Call the dilution function -
-  dilution_array = Dilution(t,x,data_dictionary);
+  % initialize the diltion array -
+  dilution_array = zeros(number_of_species,1);
 
-  % Modify the rate array -
-  rate_array = rate_array.*control_array;
-
-  # calculate the dxdt for chemical species -
-  dxdt = stoichiometric_matrix*rate_array+dilution_array;
+  % Compute -
+  for species_index = 1:number_of_species
+    dilution_array[species_index,1] = dilution_rate*(feed_composition_array[species_index] - x[species_index]);
+  end
 
 return

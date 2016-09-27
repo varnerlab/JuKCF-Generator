@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: DataDictionary
 % Description: Holds simulation and model parameters as key => value pairs in a Julia Dict()
-% Generated on: 2016-09-27T16:49:41.806
+% Generated on: 2016-09-27T17:30:31.614
 %
 % Input arguments:
 % time_start::Float64 => Simulation start time value (scalar) 

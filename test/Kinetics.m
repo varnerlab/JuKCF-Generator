@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-09-27T16:49:41.989
+% Generated on: 2016-09-27T17:30:31.797
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
@@ -61,7 +61,7 @@ function kinetic_flux_array = calculate_flux_array(t,x,data_dictionary)
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
 	% 2 B --> A
-	flux = rate_constant_array(2)*(E_reaction_1_reverse)*(B)/(saturation_constant_array(2)+B);
+	flux = rate_constant_array(2)*(E_reaction_1)*(B)/(saturation_constant_array(2)+B);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
 	% 3 A --> C

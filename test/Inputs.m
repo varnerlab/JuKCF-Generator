@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Inputs
 % Description: Calculate the simulation inputs at time t
-% Generated on: 2016-09-27T16:49:42.214
+% Generated on: 2016-09-27T17:30:32.024
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 

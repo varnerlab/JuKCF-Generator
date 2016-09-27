@@ -1,4 +1,7 @@
-function dilution_array = Dilution(t,time_step_index,x,volume,data_dictionary)
+function dilution_array = Dilution(t,x,data_dictionary)
+
+  # volume is the last species -
+  volume = x(end)
 
   # How many species do we have?
   number_of_species = length(x);
@@ -8,15 +11,18 @@ function dilution_array = Dilution(t,time_step_index,x,volume,data_dictionary)
   feed_composition_array = data_dictionary.material_feed_concentration_array;
 
   % What is the current dilution rate?
-  flow_rate = flowrate_array[time_step_index];
-  dilution_rate =(flow_rate)/(volume);
+  flow_rate = interp1(flowrate_array(:,1),flowrate_array(:,2),t);
+  dilution_rate = (flow_rate)/(volume);
 
   % initialize the diltion array -
-  dilution_array = zeros(number_of_species,1);
+  dilution_array = zeros(number_of_species+1,1);
 
   % Compute -
   for species_index = 1:number_of_species
-    dilution_array[species_index,1] = dilution_rate*(feed_composition_array[species_index] - x[species_index]);
+    dilution_array(species_index,1) = dilution_rate*(feed_composition_array(species_index) - x(species_index));
   end
+
+  % Last element is F -
+  dilution_array(end,1) = flow_rate;
 
 return

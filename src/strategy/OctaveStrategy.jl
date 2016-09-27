@@ -147,6 +147,33 @@ function build_dilution_buffer(problem_object::ProblemObject,solver_option::Symb
   return (program_component)
 end
 
+function build_control_buffer(problem_object::ProblemObject)
+
+  filename = "Control.m"
+
+  # build the header -
+  header_buffer = build_copyright_header_buffer(problem_object)
+
+  # get the comment buffer -
+  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["input_function"]
+  function_comment_buffer = build_function_header_buffer(comment_header_dictionary)
+
+  # initialize the buffer -
+  buffer = ""
+  buffer *= header_buffer
+  buffer *= "#\n"
+  buffer *= function_comment_buffer
+  buffer *= "function control_array = Control(t,x,rate_array,data_dictionary)\n"
+  buffer *= "return\n"
+
+  # build the component -
+  program_component::ProgramComponent = ProgramComponent()
+  program_component.filename = filename
+  program_component.buffer = buffer
+
+  # return -
+  return (program_component)
+end
 
 function build_inputs_buffer(problem_object::ProblemObject)
 
@@ -252,7 +279,15 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
     if (enyzme_generation_flag == 0)
       buffer *= "\tflux = rate_constant_array($(index))"
     else
-      buffer *= "\tflux = rate_constant_array($(index))*(E_$(reaction_name))"
+
+      # Cutoff _revrese -
+      if (contains(reaction_name,"_reverse") == true)
+        local_enzyme_name = reaction_name[1:end-8]
+        buffer *= "\tflux = rate_constant_array($(index))*(E_$(local_enzyme_name))"
+      else
+        local_enzyme_name = reaction_name
+        buffer *= "\tflux = rate_constant_array($(index))*(E_$(local_enzyme_name))"
+      end
     end
 
     # ok, get the list of reactants -
