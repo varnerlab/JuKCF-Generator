@@ -88,17 +88,8 @@ function main()
   write_program_components_to_disk(path_to_output_file,component_set)
 
   # Transfer distrubtion files to the output -
-  if (reactor_type == :B)
+  transfer_distribution_files("./distribution",path_to_output_file,".m")
 
-    transfer_distribution_file("./distribution","Solve.m",path_to_output_file,"Solve.m")
-    transfer_distribution_file("./distribution","Driver.m",path_to_output_file,"Driver.m")
-
-  elseif (reactor_type == :F)
-
-    transfer_distribution_file("./distribution","SolveFedbatch.m",path_to_output_file,"Solve.m")
-    transfer_distribution_file("./distribution","DriverFedbatch.m",path_to_output_file,"Driver.m")
-
-  end
 end
 
 main()

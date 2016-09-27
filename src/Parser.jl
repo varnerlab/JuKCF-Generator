@@ -20,6 +20,9 @@ function parse_vff_file(path_to_model_file::AbstractString)
 
     for sentence in tmp_array
 
+      # check for #pragma -
+      
+
       # Ok, so now we have the array for sentences -
       vff_sentence = VFFSentence()
       vff_sentence.original_sentence = sentence
