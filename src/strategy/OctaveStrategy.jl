@@ -97,6 +97,8 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
 
   @show default_upper_bound,default_rate_constant,enzyme_initial_condition
 
+  #
+
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
@@ -107,6 +109,149 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   buffer *= "\t% Load the stoichiometric network from disk - \n"
   buffer *= "\tstoichiometric_matrix = load(\"./Network.dat\");\n"
   buffer *= "\n"
+
+  # initialize the buffer -
+  buffer = ""
+  buffer *= header_buffer
+  buffer *= "#\n"
+  buffer *= function_comment_buffer
+  buffer *= "function data_dictionary = DataDictionary(time_start,time_stop,time_step)\n"
+  buffer *= "\n"
+  buffer *= "\t% Load the stoichiometric network from disk - \n"
+  buffer *= "\tstoichiometric_matrix = load(\"./Network.dat\");\n"
+  buffer *= "\n"
+
+  if (reactor_option == :F)
+    buffer *= "\t% Augment the stoichiometric matrix w/volume row (row of zeros) - \n"
+    buffer *= "\t[number_of_rows,number_of_cols] = size(stoichiometric_matrix);\n"
+    buffer *= "\tstoichiometric_matrix = [stoichiometric_matrix ; zeros(1,number_of_cols)];\n"
+    buffer *= "\n"
+  end
+
+  # write the ic for the unbalanced variables -
+  buffer *= "\t% Initialize the intial condition array for species - \n"
+  buffer *= "\tinitial_condition_array = [\n"
+  list_of_species::Array{SpeciesObject} = problem_object.list_of_species
+  counter = 1
+  for (index,species_object) in enumerate(list_of_species)
+
+    compartment_symbol::Symbol = species_object.species_compartment
+    species_type::Symbol = species_object.species_type
+
+    if (species_type == :metabolite)
+      species_symbol = species_object.species_symbol
+      buffer *= "\t\t0.0\t;\t% $(counter) $(index) $(species_symbol)\t(units: mM)\n"
+      counter = counter + 1
+    end
+
+    if (species_type == :enzyme)
+      species_symbol = species_object.species_symbol
+      buffer *= "\t\t$(enzyme_initial_condition)\t;\t% $(counter) $(index) $(species_symbol)\t(units: mM)\n"
+      counter = counter + 1
+    end
+  end
+
+  # Check for reactor type -
+  if (reactor_option == :F)
+    buffer *= "\t\t1.0\t;\t% $(counter) Volume\t(units: L)\n"
+  end
+
+  buffer *= "\t];\n"
+  buffer *= "\n"
+
+  list_of_reactions::Array{ReactionObject} = problem_object.list_of_reactions
+  buffer *= "\t% Setup rate constant array - \n"
+  buffer *= "\trate_constant_array = [\n"
+  for (index,reaction_object) in enumerate(list_of_reactions)
+
+    reaction_string = reaction_object.reaction_name
+
+    # Build comment string -
+    comment_string = build_reaction_comment_string(reaction_object)
+
+    # Set the default to 1.0 = but if enzyme degrdation reaction, then go to 0.01
+    if (is_enzyme_degradation_reaction(reaction_object) == true)
+
+      # Calculate the degrdation rate constant -
+      default_rate_constant = -1*(1/default_protein_half_life)*log(1/2)
+
+      # Build buffer -
+      buffer *= "\t\t$(default_rate_constant)\t;\t% $(index)\t(units: 1/min)\t$(reaction_string)::$(comment_string)\n"
+    else
+
+      # Build the buffer -
+      buffer *= "\t\t$(default_rate_constant)\t;\t% $(index)\t(units: 1/min)\t$(reaction_string)::$(comment_string)\n"
+    end
+  end
+  buffer *= "\t];\n"
+  buffer *= "\n"
+
+  # Setup the saturation_constant_array -
+  buffer *= "\t% Setup saturation constant array - \n"
+  buffer *= "\tsaturation_constant_array = [\n"
+  counter = 1
+  for (reaction_index,reaction_object) in enumerate(list_of_reactions)
+
+    # What type of reaction is this?
+    reaction_type = reaction_object.reaction_type
+    if (reaction_type == :kinetic)
+
+      # Write the line -
+      list_of_reactants = reaction_object.list_of_reactants
+      for (species_index,species_object) in enumerate(list_of_reactants)
+
+        # Get the symbol -
+        species_type = species_object.species_type
+        species_symbol = species_object.species_symbol
+        stcoeff = species_object.stoichiometric_coefficient
+
+        # If we have a *non-zero* coefficient -
+        if (stcoeff != 0.0 && species_type != :enzyme)
+
+          # buffer -
+          buffer *= "\t\t$(default_saturation_constant)\t;\t% $(counter) K_R$(reaction_index)_$(species_symbol)\t(units: mM)\n"
+
+          # update -
+          counter = counter + 1
+        end
+      end
+    end
+  end
+
+  buffer *= "\t];\n"
+  buffer *= "\n"
+  if (reactor_option == :F)
+    buffer *= "\t% Setup the volumetric_flowrate_array - \n"
+    buffer *= "\tvolumetric_flowrate_array = [];\n"
+    buffer *= "\n"
+    buffer *= "\t% Setup the feed concentrations - \n"
+    buffer *= "\tmaterial_feed_concentration_array = [\n"
+    for (index,species_object) in enumerate(list_of_species)
+
+      # what is the species symbol?
+      species_symbol = species_object.species_symbol
+
+      buffer *= "\t\t0.0\t;\t% $(index)\t $(species_symbol)\t(units: mM)\n"
+    end
+    buffer *= "\t];\n"
+  end
+
+  buffer *= "\n"
+  buffer *= "\t% =============================== DO NOT EDIT BELOW THIS LINE ============================== %\n"
+  buffer *= "\tdata_dictionary = [];\n"
+  buffer *= "\tdata_dictionary.initial_condition_array = initial_condition_array;\n"
+  buffer *= "\tdata_dictionary.total_number_of_states = length(initial_condition_array);\n"
+  buffer *= "\tdata_dictionary.stoichiometric_matrix = stoichiometric_matrix;\n"
+
+  if (reactor_option == :F)
+    buffer *= "\tdata_dictionary.volumetric_flowrate_array = volumetric_flowrate_array;\n"
+    buffer *= "\tdata_dictionary.material_feed_concentration_array = material_feed_concentration_array;\n"
+  end
+
+  buffer *= "\tdata_dictionary.rate_constant_array = rate_constant_array;\n"
+  buffer *= "\tdata_dictionary.saturation_constant_array = saturation_constant_array;\n"
+  buffer *= "\t% =============================== DO NOT EDIT ABOVE THIS LINE ============================== %\n"
+  buffer *= "return\n"
 
   # build the component -
   program_component::ProgramComponent = ProgramComponent()
@@ -155,7 +300,7 @@ function build_control_buffer(problem_object::ProblemObject)
   header_buffer = build_copyright_header_buffer(problem_object)
 
   # get the comment buffer -
-  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["input_function"]
+  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["control_function"]
   function_comment_buffer = build_function_header_buffer(comment_header_dictionary)
 
   # initialize the buffer -
@@ -164,6 +309,10 @@ function build_control_buffer(problem_object::ProblemObject)
   buffer *= "#\n"
   buffer *= function_comment_buffer
   buffer *= "function control_array = Control(t,x,rate_array,data_dictionary)\n"
+  buffer *= "\n"
+  buffer *= "\t% Initialize the control array - \n"
+  buffer *= "\tcontrol_array = ones(length(rate_array),1);\n"
+  buffer *= "\n"
   buffer *= "return\n"
 
   # build the component -

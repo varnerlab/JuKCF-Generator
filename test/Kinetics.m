@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-09-27T17:30:31.797
+% Generated on: 2016-09-27T20:56:06.333
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 

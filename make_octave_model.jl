@@ -80,8 +80,8 @@ function main()
   push!(component_set,program_component_inputs)
 
   # Write the Inputs -
-  program_component_inputs = build_inputs_buffer(problem_object)
-  push!(component_set,program_component_inputs)
+  program_component_control = build_control_buffer(problem_object)
+  push!(component_set,program_component_control)
 
   # Write the stoichiometric_matrix --
   program_component_stoichiometric_matrix = generate_stoichiomteric_matrix_buffer(problem_object)

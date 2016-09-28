@@ -25,17 +25,20 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-09-27T17:30:31.674
+% Generated on: 2016-09-27T20:56:06.229
 %
 % Input arguments:
-% t::Float64 => Current time value (scalar) 
-% x::Array{Float64,1} => State array (number_of_species x 1) 
-% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+% t::Float64 => Current time value (scalar)
+% x::Array{Float64,1} => State array (number_of_species x 1)
+% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 %
 % Output arguments:
-% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t 
+% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t
 % ----------------------------------------------------------------------------------- %
-function dilution_array = Dilution(t,time_step_index,x,volume,data_dictionary)
+function dilution_array = Dilution(t,x,data_dictionary)
+
+  # volume is the last species -
+  volume = x(end)
 
   # How many species do we have?
   number_of_species = length(x);
@@ -45,15 +48,23 @@ function dilution_array = Dilution(t,time_step_index,x,volume,data_dictionary)
   feed_composition_array = data_dictionary.material_feed_concentration_array;
 
   % What is the current dilution rate?
-  flow_rate = flowrate_array[time_step_index];
-  dilution_rate =(flow_rate)/(volume);
+  if (isempty(flowrate_array) == false)
+    flow_rate = interp1(flowrate_array(:,1),flowrate_array(:,2),t);
+    dilution_rate = (flow_rate)/(volume);
+  else
+    flow_rate = 0.0;
+    dilution_rate = 0.0;
+  end
 
   % initialize the diltion array -
   dilution_array = zeros(number_of_species,1);
 
   % Compute -
-  for species_index = 1:number_of_species
-    dilution_array[species_index,1] = dilution_rate*(feed_composition_array[species_index] - x[species_index]);
+  for species_index = 1:number_of_species - 1
+    dilution_array(species_index,1) = dilution_rate*(feed_composition_array(species_index) - x(species_index));
   end
+
+  % Last element is F -
+  dilution_array(end,1) = flow_rate;
 
 return
