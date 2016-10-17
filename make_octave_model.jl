@@ -47,10 +47,11 @@ function main()
 
   # Load the statement_vector -
   path_to_model_file = parsed_args["m"]
-  statement_vector::Array{VFFSentence} = parse_vff_file(path_to_model_file)
+  metabolic_statement_vector::Array{VFFSentence} = parse_vff_metabolic_statements(path_to_model_file)
+  control_statement_vector::Array{VFFControlSentence} = parse_vff_control_statements(path_to_model_file)
 
   # Generate the problem object -
-  problem_object = generate_problem_object(statement_vector)
+  problem_object = generate_problem_object(metabolic_statement_vector,control_statement_vector)
 
   # Load the JSON configuration file -
   config_dict = JSON.parsefile("./config/Configuration.json")
@@ -94,7 +95,6 @@ function main()
   # Transfer distrubtion files to the output -
   transfer_distribution_file("./distribution","Balances.m",path_to_output_file,"Balances.m")
   transfer_distribution_file("./distribution","SolveBalances.m",path_to_output_file,"SolveBalances.m")
-
 end
 
 main()

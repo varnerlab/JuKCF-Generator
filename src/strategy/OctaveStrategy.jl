@@ -159,6 +159,7 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   buffer *= "\t];\n"
   buffer *= "\n"
 
+
   list_of_reactions::Array{ReactionObject} = problem_object.list_of_reactions
   buffer *= "\t% Setup rate constant array - \n"
   buffer *= "\trate_constant_array = [\n"
@@ -219,6 +220,34 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   end
 
   buffer *= "\t];\n"
+
+  list_of_control_statements::Array{VFFControlSentence} = problem_object.list_of_control_statements
+  if (isempty(list_of_control_statements) == false)
+
+    buffer *= "\n"
+    buffer *= "\t% Setup list of control parameters - \n"
+    buffer *= "\tcontrol_parameter_array = [\n"
+    counter = 1
+    for (control_statement_index,control_statement_object) in enumerate(list_of_control_statements)
+
+      control_actor = control_statement_object.control_actor
+      control_type = control_statement_object.control_type
+      control_target = control_statement_object.control_target
+
+      buffer *= "\t\t1.0\t;\t%\t $(counter)\tN_$(control_actor)_$(control_target)\n"
+      counter = counter + 1
+      buffer *= "\t\t1.0\t;\t%\t $(counter)\tK_$(control_actor)_$(control_target)\n"
+      counter = counter + 1
+
+      if (control_type == :activate)
+        buffer *= "\t\t1.0\t;\t%\t $(counter)\tgain_$(control_actor)_$(control_target)\n"
+        counter = counter + 1
+      end
+    end
+    buffer *= "\t];\n"
+  end
+
+
   buffer *= "\n"
   if (reactor_option == :F)
     buffer *= "\t% Setup the volumetric_flowrate_array - \n"
@@ -250,6 +279,11 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
 
   buffer *= "\tdata_dictionary.rate_constant_array = rate_constant_array;\n"
   buffer *= "\tdata_dictionary.saturation_constant_array = saturation_constant_array;\n"
+
+  if (isempty(list_of_control_statements) == false)
+    buffer *= "\tdata_dictionary.control_parameter_array = control_parameter_array;\n"
+  end
+
   buffer *= "\t% =============================== DO NOT EDIT ABOVE THIS LINE ============================== %\n"
   buffer *= "return\n"
 
@@ -303,17 +337,116 @@ function build_control_buffer(problem_object::ProblemObject)
   comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["control_function"]
   function_comment_buffer = build_function_header_buffer(comment_header_dictionary)
 
+  # Get list of control statements -
+  list_of_control_statements::Array{VFFControlSentence} = problem_object.list_of_control_statements
+  list_of_reactions::Array{ReactionObject} = problem_object.list_of_reactions
+
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
   buffer *= "#\n"
   buffer *= function_comment_buffer
-  buffer *= "function control_array = Control(t,x,rate_array,data_dictionary)\n"
-  buffer *= "\n"
-  buffer *= "\t% Initialize the control array - \n"
-  buffer *= "\tcontrol_array = ones(length(rate_array),1);\n"
-  buffer *= "\n"
-  buffer *= "return\n"
+
+  # if we have *no* control statements, then generate default v's
+  if (isempty(list_of_control_statements) == true)
+
+    buffer *= "function control_array = Control(t,x,rate_array,data_dictionary)\n"
+    buffer *= "\n"
+    buffer *= "\t% Initialize the control array - \n"
+    buffer *= "\tcontrol_array = ones(length(rate_array),1);\n"
+    buffer *= "\n"
+    buffer *= "return\n"
+
+  else
+
+    buffer *= "function control_array = Control(t,x,rate_array,data_dictionary)\n"
+    buffer *= "\n"
+    buffer *= "\t% Initialize the control array - \n"
+    buffer *= "\tcontrol_array = ones(length(rate_array),1);\n"
+    buffer *= "\n"
+
+    buffer *= "\t% Alias control parameters - \n"
+    counter = 1
+    buffer *= "\tcontrol_parameter_array = data_dictionary.control_parameter_array;\n"
+    for (control_statement_index,control_statement_object) in enumerate(list_of_control_statements)
+
+      control_actor = control_statement_object.control_actor
+      control_type = control_statement_object.control_type
+      control_target = control_statement_object.control_target
+
+      # write the order line -
+      buffer *= "\tN_$(control_actor)_$(control_target) = control_parameter_array($(counter));\n"
+      counter = counter + 1
+      buffer *= "\tK_$(control_actor)_$(control_target) = control_parameter_array($(counter));\n"
+      counter = counter + 1
+      if (control_type == :activate)
+        buffer *= "\tgain_$(control_actor)_$(control_target) = control_parameter_array($(counter));\n"
+        counter = counter + 1
+      end
+
+    end
+    buffer *= "\n"
+
+
+    buffer *= "\t% list of control statements -\n"
+    for (control_statement_index,control_statement_object) in enumerate(list_of_control_statements)
+      buffer *= "\t% $(control_statement_object.original_sentence)\n"
+    end
+
+    buffer *= "\n"
+
+    # get set of controlled reactions -
+    controlled_reaction_set = extract_controlled_reaction_name_set(list_of_control_statements)
+    for (reaction_index,reaction_object) in enumerate(list_of_reactions)
+
+      # Get reaction name -
+      local_reaction_name = reaction_object.reaction_name
+
+      @show reaction_object
+
+      if (in(local_reaction_name,controlled_reaction_set) == true)
+
+        buffer *= "\ttransfer_function_buffer = [];\n"
+
+        # ok, we are in the controlled reaction set -
+        # find all contol interactions involving this reaction -
+        list_of_local_rules = get_control_rules_associated_with_reaction(list_of_control_statements,local_reaction_name)
+
+        # Generate the transfer function -
+        contains_inhibition_rules = false
+        for (local_rule_index,local_rule_object) in enumerate(list_of_local_rules)
+
+          # What is the actor?
+          control_actor = local_rule_object.control_actor
+          control_type = local_rule_object.control_type
+
+
+          if (control_type == :inhibit)
+            buffer *= "\ttmp_value = $(control_actor)^(N_$(control_actor)_$(local_reaction_name))/(K_$(control_actor)_$(local_reaction_name)^(N_$(control_actor)_$(local_reaction_name))+$(control_actor)^(N_$(control_actor)_$(local_reaction_name));\n"
+            buffer *= "\ttransfer_function_buffer = [transfer_function_buffer 1-tmp_value];\n"
+            contains_inhibition_rules = true
+          else
+            buffer *= "\ttmp_value = gain_$(control_actor)_$(local_reaction_name)*($(control_actor)^(N_$(control_actor)_$(local_reaction_name))/(K_$(control_actor)_$(local_reaction_name)^(N_$(control_actor)_$(local_reaction_name))+$(control_actor)^(N_$(control_actor)_$(local_reaction_name)));\n"
+            buffer *= "\ttransfer_function_buffer = [transfer_function_buffer tmp_value];\n"
+          end
+        end
+
+        if (contains_inhibition_rules == false)
+          buffer *= "\tcontrol_array($(reaction_index)) = max(transfer_function_buffer);\n"
+        else
+          buffer *= "\tcontrol_array($(reaction_index)) = min(transfer_function_buffer);\n"
+        end
+
+        buffer *= "\n"
+      end
+    end
+
+
+    buffer *= "return\n"
+
+  end
+
+
 
   # build the component -
   program_component::ProgramComponent = ProgramComponent()
@@ -411,7 +544,7 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
   list_of_reactions::Array{ReactionObject} = problem_object.list_of_reactions
   list_of_metabolic_reactions::Array{ReactionObject} = extract_metabolic_reactions(list_of_reactions)
 
-  @show list_of_reactions
+  # @show list_of_reactions
 
   counter = 1
   for (index,reaction_object::ReactionObject) in enumerate(list_of_metabolic_reactions)
@@ -548,7 +681,7 @@ function extract_metabolic_reactions(list_of_reactions::Array{ReactionObject})
     # What is the reaction_type?
     reaction_type::Symbol = reaction_object.reaction_type
 
-    @show reaction_object
+    # @show reaction_object
 
     # is this a metabolic_reaction?
     is_metabolic_reaction::Bool = false

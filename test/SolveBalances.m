@@ -24,7 +24,7 @@
 %
 % ----------------------------------------------------------------------------------- %
 % SolveBalances: Solves model equations from TSTART to TSTOP given parameters in data_dictionary.
-% Type: JuKCF-Matlab
+% Type: JuKCF-Octave
 % Version: 1.0
 %
 % Input arguments:
@@ -47,7 +47,7 @@ function [TSIM,X] = SolveBalances(TSTART,TSTOP,Ts,data_dictionary)
 
 	% Call LSODE -
 	pBalanceEquations = @(x,t)Balances(x,t,data_dictionary);
-	X = ode15s(pBalanceEquations,initial_condition_array,TSIM);
+	X = lsode(pBalanceEquations,initial_condition_array,TSIM);
 
   % Check and correct for negatives -
   idx_negative = find(X<0);

@@ -208,6 +208,77 @@ function partition!(list_of_species::Array{SpeciesObject})
   permute!(list_of_species,permutation_index_array)
 end
 
+function partition!(list_of_control_statements::Array{VFFControlSentence})
+
+  reaction_target_name_array = String[]
+
+  for (index,control_statement_object) in enumerate(list_of_control_statements)
+    push!(reaction_target_name_array,control_statement_object.control_target)
+  end
+
+  # sort by name -
+  permutation_index_array = sortperm(reaction_target_name_array)
+
+  # permute -
+  permute!(list_of_control_statements,permutation_index_array)
+end
+
+function extract_reaction_name_set(list_of_reactions::Array{ReactionObject})
+
+  reaction_name_set = Set{String}()
+  for (index,reaction_object) in enumerate(list_of_reactions)
+
+    local_reaction_name = reaction_object.reaction_name
+    push!(reaction_name_set,local_reaction_name)
+  end
+
+  return reaction_name_set
+end
+
+function get_control_rules_associated_with_reaction(list_of_control_statements::Array{VFFControlSentence},reaction_name::AbstractString)
+
+  rules_array = VFFControlSentence[]
+  for (index,control_object) in enumerate(list_of_control_statements)
+
+    local_target_name = control_object.control_target
+    if (local_target_name == reaction_name)
+      push!(rules_array,control_object)
+    end
+  end
+
+  return rules_array
+
+end
+
+function extract_controlled_reaction_name_set(list_of_control_statements::Array{VFFControlSentence})
+
+  reaction_name_set = Set{String}()
+  for (index,control_object) in enumerate(list_of_control_statements)
+
+    local_reaction_name = control_object.control_target
+    push!(reaction_name_set,local_reaction_name)
+  end
+
+  return reaction_name_set
+end
+
+
+function find_index_of_reaction_with_name(reaction_array::Array{ReactionObject},reaction_name::String)
+
+  desired_reaction_index = -1
+  for (reaction_index,reaction_object) in enumerate(reaction_array)
+
+    # get reaction name -
+    test_reaction_name = reaction_object.reaction_name
+    if (test_reaction_name == reaction_name)
+      desired_reaction_index = reaction_index
+      break
+    end
+  end
+
+  return desired_reaction_index
+end
+
 function copy(sentence::VFFSentence)
 
   # create a new sentence -

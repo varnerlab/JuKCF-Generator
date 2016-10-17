@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: DataDictionary
 % Description: Holds simulation and model parameters as key => value pairs in a Julia Dict()
-% Generated on: 2016-10-17T13:17:53.743
+% Generated on: 2016-10-17T15:23:37.226
 %
 % Input arguments:
 % time_start::Float64 => Simulation start time value (scalar) 
@@ -60,11 +60,11 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		25000.0	;	% 4	(units: 1/min)	reaction_2::A --> C
 		25000.0	;	% 5	(units: 1/min)	reaction_3::C --> B
 		25000.0	;	% 6	(units: 1/min)	reaction_4::C --> []
-		0.0023104906018664843	;	% 7	(units: 1/min)	reaction_0::E_reaction_0 --> []
-		0.0023104906018664843	;	% 8	(units: 1/min)	reaction_1::E_reaction_1 --> []
-		0.0023104906018664843	;	% 9	(units: 1/min)	reaction_2::E_reaction_2 --> []
-		0.0023104906018664843	;	% 10	(units: 1/min)	reaction_3::E_reaction_3 --> []
-		0.0023104906018664843	;	% 11	(units: 1/min)	reaction_4::E_reaction_4 --> []
+		0.0023104906018664843	;	% 7	(units: 1/min)	E_degrade_reaction_0::E_reaction_0 --> []
+		0.0023104906018664843	;	% 8	(units: 1/min)	E_degrade_reaction_1::E_reaction_1 --> []
+		0.0023104906018664843	;	% 9	(units: 1/min)	E_degrade_reaction_2::E_reaction_2 --> []
+		0.0023104906018664843	;	% 10	(units: 1/min)	E_degrade_reaction_3::E_reaction_3 --> []
+		0.0023104906018664843	;	% 11	(units: 1/min)	E_degrade_reaction_4::E_reaction_4 --> []
 	];
 
 	% Setup saturation constant array - 
@@ -76,6 +76,13 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		0.05	;	% 5 K_R6_C	(units: mM)
 	];
 
+	% Setup list of control parameters - 
+	control_parameter_array = [
+		1.0	;	%	 1	N_A_reaction_1
+		1.0	;	%	 2	K_A_reaction_1
+		1.0	;	%	 3	gain_A_reaction_1
+	];
+
 
 	% =============================== DO NOT EDIT BELOW THIS LINE ============================== %
 	data_dictionary = [];
@@ -84,5 +91,6 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 	data_dictionary.stoichiometric_matrix = stoichiometric_matrix;
 	data_dictionary.rate_constant_array = rate_constant_array;
 	data_dictionary.saturation_constant_array = saturation_constant_array;
+	data_dictionary.control_parameter_array = control_parameter_array;
 	% =============================== DO NOT EDIT ABOVE THIS LINE ============================== %
 return

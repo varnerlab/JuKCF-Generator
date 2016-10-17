@@ -74,6 +74,7 @@ type ProblemObject
   configuration_dictionary::Dict{AbstractString,Any}
   list_of_species::Array{SpeciesObject}
   list_of_reactions::Array{ReactionObject}
+  list_of_control_statements::Array{VFFControlSentence}
 
   function ProblemObject()
     this = new()

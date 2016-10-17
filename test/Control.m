@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Control
 % Description: Calculate the allosteric control array at time t
-% Generated on: 2016-10-17T13:17:54.476
+% Generated on: 2016-10-17T15:23:37.559
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
@@ -39,5 +39,19 @@ function control_array = Control(t,x,rate_array,data_dictionary)
 
 	% Initialize the control array - 
 	control_array = ones(length(rate_array),1);
+
+	% Alias control parameters - 
+	control_parameter_array = data_dictionary.control_parameter_array;
+	N_A_reaction_1 = control_parameter_array(1);
+	K_A_reaction_1 = control_parameter_array(2);
+	gain_A_reaction_1 = control_parameter_array(3);
+
+	% list of control statements -
+	% A activates reaction_1
+
+	transfer_function_buffer = [];
+	tmp_value = gain_A_reaction_1*(A^(N_A_reaction_1)/(K_A_reaction_1^(N_A_reaction_1)+A^(N_A_reaction_1));
+	transfer_function_buffer = [transfer_function_buffer tmp_value];
+	control_array(2) = max(transfer_function_buffer);
 
 return

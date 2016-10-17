@@ -1,26 +1,29 @@
-function generate_problem_object(statement_vector::Array{VFFSentence})
+function generate_problem_object(metabolic_statement_vector::Array{VFFSentence},control_sentence_vector::Array{VFFControlSentence})
 
   # Initilize an empty problem object -
   problem_object::ProblemObject = ProblemObject()
 
   # construct the array of species -
-  species_array::Array{SpeciesObject} = build_species_list(statement_vector)
+  species_array::Array{SpeciesObject} = build_species_list(metabolic_statement_vector)
 
   # construct the array of reactions -
-  reaction_array::Array{ReactionObject} = build_reaction_list(statement_vector)
+  reaction_array::Array{ReactionObject} = build_reaction_list(metabolic_statement_vector)
 
   # Add enzymes to species array -
-  append_enzymes_to_species_list!(species_array,statement_vector)
+  append_enzymes_to_species_list!(species_array,metabolic_statement_vector)
 
   # Add enzyme degradation rates to list of reaction_array -
-  append_enzyme_degradation_to_reaction_list!(reaction_array,statement_vector)
+  append_enzyme_degradation_to_reaction_list!(reaction_array,metabolic_statement_vector)
 
   # partition the reactions -
   partition!(reaction_array)
 
+  @show size(reaction_array)
+
   # set data on problem_object -
   problem_object.list_of_species = species_array
   problem_object.list_of_reactions = reaction_array
+  problem_object.list_of_control_statements = partition!(control_sentence_vector)
 
   # return#the problem_object -
   return problem_object
@@ -51,7 +54,7 @@ function append_enzyme_degradation_to_reaction_list!(list_of_reactions::Array{Re
       # list_of_products::Array{SpeciesObject}
 
       degradation_reaction.is_reaction_reversible = false
-      degradation_reaction.reaction_name = "$(reaction_name)"
+      degradation_reaction.reaction_name = "E_degrade_$(reaction_name)"
 
       # create an enzyme (reactant ..)
       enzyme_object::SpeciesObject = SpeciesObject()
