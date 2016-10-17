@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Control
 % Description: Calculate the allosteric control array at time t
-% Generated on: 2016-10-17T15:39:01.478
+% Generated on: 2016-10-17T16:01:54.961
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 

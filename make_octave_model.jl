@@ -95,6 +95,7 @@ function main()
   # Transfer distrubtion files to the output -
   transfer_distribution_file("./distribution","Balances.m",path_to_output_file,"Balances.m")
   transfer_distribution_file("./distribution","SolveBalances.m",path_to_output_file,"SolveBalances.m")
+  transfer_distribution_file("./distribution","Driver.m",path_to_output_file,"Driver.m")
 end
 
 main()
