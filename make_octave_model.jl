@@ -92,7 +92,8 @@ function main()
   write_program_components_to_disk(path_to_output_file,component_set)
 
   # Transfer distrubtion files to the output -
-  transfer_distribution_files("./distribution",path_to_output_file,".m")
+  transfer_distribution_file("./distribution","Balances.m",path_to_output_file,"Balances.m")
+  transfer_distribution_file("./distribution","SolveBalances.m",path_to_output_file,"SolveBalances.m")
 
 end
 

@@ -270,7 +270,7 @@ function build_dilution_buffer(problem_object::ProblemObject,solver_option::Symb
   header_buffer = build_copyright_header_buffer(problem_object)
 
   # get the comment buffer -
-  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["kinetics_function"]
+  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["dilution_function"]
   function_comment_buffer = build_function_header_buffer(comment_header_dictionary)
 
   # initialize the buffer -
@@ -545,6 +545,8 @@ function extract_metabolic_reactions(list_of_reactions::Array{ReactionObject})
 
     # What is the reaction_type?
     reaction_type::Symbol = reaction_object.reaction_type
+
+    @show reaction_object
 
     # is this a metabolic_reaction?
     is_metabolic_reaction::Bool = false

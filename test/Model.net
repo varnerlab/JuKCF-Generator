@@ -7,6 +7,7 @@
 // Record:
 // name (unique),{1|0},reactant_string,product_string,reverse,forward
 // --------------------------------------------------------------------- //
-reaction_1,1,A,B,-inf,inf
-reaction_2,1,A,C,0,inf
-reaction_3,1,C,B,0,inf
+reaction_0,[],[],A,0,inf
+reaction_1,[],A,B,-inf,inf
+reaction_2,[],A,C,0,inf
+reaction_3,[],C,B,0,inf

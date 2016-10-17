@@ -25,15 +25,15 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-09-27T20:56:06.229
+% Generated on: 2016-10-17T09:55:23.788
 %
 % Input arguments:
-% t::Float64 => Current time value (scalar)
-% x::Array{Float64,1} => State array (number_of_species x 1)
-% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
+% t::Float64 => Current time value (scalar) 
+% x::Array{Float64,1} => State array (number_of_species x 1) 
+% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
 %
 % Output arguments:
-% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t
+% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t 
 % ----------------------------------------------------------------------------------- %
 function dilution_array = Dilution(t,x,data_dictionary)
 

@@ -24,7 +24,7 @@
 %
 % ----------------------------------------------------------------------------------- %
 % SolveBalances: Solves model equations from TSTART to TSTOP given parameters in data_dictionary.
-% Type: GRN-JULIA
+% Type: JuKCF-Octave
 % Version: 1.0
 %
 % Input arguments:

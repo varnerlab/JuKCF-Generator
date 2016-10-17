@@ -53,7 +53,15 @@ function parse_vff_file(path_to_model_file::AbstractString)
         # sentence_forward_bound::Float64
         # sentence_delimiter::Char
         vff_sentence.sentence_name = split_array[1]
-        vff_sentence.sentence_type_flag = parse(Int,split_array[2])
+
+        # grab the enzme type flag -
+        enzyme_type_flag = split_array[2]
+        if (enzyme_type_flag == "[]" || enzyme_type_flag == "1")
+          vff_sentence.sentence_type_flag = 1
+        else
+          vff_sentence.sentence_type_flag = 0
+        end
+
         vff_sentence.sentence_reactant_clause = split_array[3]
         vff_sentence.sentence_product_clause = split_array[4]
         vff_sentence.sentence_reverse_bound = parse(Float64,split_array[5])

@@ -24,7 +24,7 @@
 %
 % ----------------------------------------------------------------------------------- %
 % Balances: Evaluates model equations given time, state and the data_dictionary.
-% Type: GRN-JULIA
+% Type: JuKCF-Octave
 % Version: 1.0
 %
 % Input arguments:

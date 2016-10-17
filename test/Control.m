@@ -24,8 +24,8 @@
 #
 % ----------------------------------------------------------------------------------- %
 % Function: Control
-% Description: Calculate the transcriptional control array at time t
-% Generated on: 2016-09-27T20:56:06.546
+% Description: Calculate the allosteric control array at time t
+% Generated on: 2016-10-17T10:09:24.492
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
