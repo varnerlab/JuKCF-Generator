@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: DataDictionary
 % Description: Holds simulation and model parameters as key => value pairs in a Julia Dict()
-% Generated on: 2016-10-17T10:09:23.953
+% Generated on: 2016-10-17T12:07:46.223
 %
 % Input arguments:
 % time_start::Float64 => Simulation start time value (scalar) 
@@ -49,6 +49,7 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		0.0004	;	% 5 5 E_reaction_1	(units: mM)
 		0.0004	;	% 6 6 E_reaction_2	(units: mM)
 		0.0004	;	% 7 7 E_reaction_3	(units: mM)
+		0.0004	;	% 8 8 E_reaction_4	(units: mM)
 	];
 
 	% Setup rate constant array - 
@@ -58,10 +59,12 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		25000.0	;	% 3	(units: 1/min)	reaction_1_reverse::B --> A
 		25000.0	;	% 4	(units: 1/min)	reaction_2::A --> C
 		25000.0	;	% 5	(units: 1/min)	reaction_3::C --> B
-		0.0023104906018664843	;	% 6	(units: 1/min)	reaction_0::E_reaction_0 --> []
-		0.0023104906018664843	;	% 7	(units: 1/min)	reaction_1::E_reaction_1 --> []
-		0.0023104906018664843	;	% 8	(units: 1/min)	reaction_2::E_reaction_2 --> []
-		0.0023104906018664843	;	% 9	(units: 1/min)	reaction_3::E_reaction_3 --> []
+		25000.0	;	% 6	(units: 1/min)	reaction_4::C --> []
+		0.0023104906018664843	;	% 7	(units: 1/min)	reaction_0::E_reaction_0 --> []
+		0.0023104906018664843	;	% 8	(units: 1/min)	reaction_1::E_reaction_1 --> []
+		0.0023104906018664843	;	% 9	(units: 1/min)	reaction_2::E_reaction_2 --> []
+		0.0023104906018664843	;	% 10	(units: 1/min)	reaction_3::E_reaction_3 --> []
+		0.0023104906018664843	;	% 11	(units: 1/min)	reaction_4::E_reaction_4 --> []
 	];
 
 	% Setup saturation constant array - 
@@ -70,6 +73,7 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		0.05	;	% 2 K_R3_B	(units: mM)
 		0.05	;	% 3 K_R4_A	(units: mM)
 		0.05	;	% 4 K_R5_C	(units: mM)
+		0.05	;	% 5 K_R6_C	(units: mM)
 	];
 
 

@@ -411,6 +411,8 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
   list_of_reactions::Array{ReactionObject} = problem_object.list_of_reactions
   list_of_metabolic_reactions::Array{ReactionObject} = extract_metabolic_reactions(list_of_reactions)
 
+  @show list_of_reactions
+
   counter = 1
   for (index,reaction_object::ReactionObject) in enumerate(list_of_metabolic_reactions)
 
@@ -554,13 +556,18 @@ function extract_metabolic_reactions(list_of_reactions::Array{ReactionObject})
 
       # ok, we have a kinetic reaction - does it involve metabolites?
       list_of_reactants::Array{SpeciesObject} = reaction_object.list_of_reactants
-      for species_object in list_of_reactants
+      if (isempty(list_of_reactants) == true)
+        is_metabolic_reaction = true
+      else
 
-        species_type::Symbol = species_object.species_type
-        if (species_type == :metabolite)
-          is_metabolic_reaction = true
+        for species_object in list_of_reactants
+
+          species_type::Symbol = species_object.species_type
+          if (species_type == :metabolite)
+            is_metabolic_reaction = true
+          end
         end
-      end
+      end # end empty check if -
 
       if (is_metabolic_reaction == true)
         push!(list_of_metabolic_reactions,reaction_object)

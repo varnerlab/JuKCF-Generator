@@ -11,3 +11,4 @@ reaction_0,[],[],A,0,inf
 reaction_1,[],A,B,-inf,inf
 reaction_2,[],A,C,0,inf
 reaction_3,[],C,B,0,inf
+reaction_4,[],C,[],0,inf

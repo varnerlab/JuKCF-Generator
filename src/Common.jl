@@ -148,7 +148,7 @@ function partition!(list_of_reactions::Array{ReactionObject})
 
     is_kinetic_reaction::Bool = true
 
-    get the list of reactants -
+    # get the list of reactants -
     list_of_reactants::Array{SpeciesObject} = reaction_object.list_of_reactants
     for (local_index,species_object::SpeciesObject) in enumerate(list_of_reactants)
       if (species_object.species_compartment == :unbalanced)

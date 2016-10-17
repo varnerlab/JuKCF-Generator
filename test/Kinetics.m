@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-10-17T10:09:24.101
+% Generated on: 2016-10-17T12:07:46.37
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
@@ -53,40 +53,53 @@ function kinetic_flux_array = calculate_flux_array(t,x,data_dictionary)
 	E_reaction_1 = x(5);
 	E_reaction_2 = x(6);
 	E_reaction_3 = x(7);
+	E_reaction_4 = x(8);
 
 	% Write the kinetics functions - 
 	kinetic_flux_array = [];
 
-	% 1 A --> B
-	flux = rate_constant_array(1)*(E_reaction_1)*(A)/(saturation_constant_array(1)+A);
+	% 1 [] --> A
+	flux = rate_constant_array(1)*(E_reaction_0);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 2 B --> A
-	flux = rate_constant_array(2)*(E_reaction_1)*(B)/(saturation_constant_array(2)+B);
+	% 2 A --> B
+	flux = rate_constant_array(2)*(E_reaction_1)*(A)/(saturation_constant_array(1)+A);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 3 A --> C
-	flux = rate_constant_array(3)*(E_reaction_2)*(A)/(saturation_constant_array(3)+A);
+	% 3 B --> A
+	flux = rate_constant_array(3)*(E_reaction_1)*(B)/(saturation_constant_array(2)+B);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 4 C --> B
-	flux = rate_constant_array(4)*(E_reaction_3)*(C)/(saturation_constant_array(4)+C);
+	% 4 A --> C
+	flux = rate_constant_array(4)*(E_reaction_2)*(A)/(saturation_constant_array(3)+A);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 5 E_reaction_0 --> []
-	flux = rate_constant_array(5)*(E_reaction_0);
+	% 5 C --> B
+	flux = rate_constant_array(5)*(E_reaction_3)*(C)/(saturation_constant_array(4)+C);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 6 E_reaction_1 --> []
-	flux = rate_constant_array(6)*(E_reaction_1);
+	% 6 C --> []
+	flux = rate_constant_array(6)*(E_reaction_4)*(C)/(saturation_constant_array(5)+C);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 7 E_reaction_2 --> []
-	flux = rate_constant_array(7)*(E_reaction_2);
+	% 7 E_reaction_0 --> []
+	flux = rate_constant_array(7)*(E_reaction_0);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
-	% 8 E_reaction_3 --> []
-	flux = rate_constant_array(8)*(E_reaction_3);
+	% 8 E_reaction_1 --> []
+	flux = rate_constant_array(8)*(E_reaction_1);
+	kinetic_flux_array = [kinetic_flux_array ; flux];
+
+	% 9 E_reaction_2 --> []
+	flux = rate_constant_array(9)*(E_reaction_2);
+	kinetic_flux_array = [kinetic_flux_array ; flux];
+
+	% 10 E_reaction_3 --> []
+	flux = rate_constant_array(10)*(E_reaction_3);
+	kinetic_flux_array = [kinetic_flux_array ; flux];
+
+	% 11 E_reaction_4 --> []
+	flux = rate_constant_array(11)*(E_reaction_4);
 	kinetic_flux_array = [kinetic_flux_array ; flux];
 
 return;
