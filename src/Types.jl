@@ -16,6 +16,19 @@ type VFFSentence
   end
 end
 
+type VFFControlSentence
+
+  original_sentence::AbstractString
+  control_target::AbstractString
+  control_actor::AbstractString
+  control_type::Symbol
+
+  function VFFControlSentence()
+    this = new()
+  end
+
+end
+
 type ProgramComponent
 
   filename::AbstractString
