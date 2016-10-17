@@ -11,7 +11,8 @@ reaction_0,[],[],A,0,inf
 reaction_1,[],A,B,-inf,inf
 reaction_2,[],A,C,0,inf
 reaction_3,[],C,B,0,inf
-reaction_4,[],C,[],0,inf
+reaction_4,[],B,[],0,inf
+reaction_5,[],C,[],0,inf
 
 // --------------------------------------------------------------------- //
 // Control statements -
@@ -20,6 +21,5 @@ reaction_4,[],C,[],0,inf
 // Record:
 // actor {inhibits|activates} target (reaction_name)
 // --------------------------------------------------------------------- //
-//C inhibits reaction_1
-//B inhibits reaction_2
+B inhibits reaction_2
 A activates reaction_1

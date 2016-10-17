@@ -304,7 +304,7 @@ function build_dilution_buffer(problem_object::ProblemObject,solver_option::Symb
   header_buffer = build_copyright_header_buffer(problem_object)
 
   # get the comment buffer -
-  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["dilution_function"]
+  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["kinetics_function"]
   function_comment_buffer = build_function_header_buffer(comment_header_dictionary)
 
   # initialize the buffer -
@@ -365,6 +365,20 @@ function build_control_buffer(problem_object::ProblemObject)
     buffer *= "\tcontrol_array = ones(length(rate_array),1);\n"
     buffer *= "\n"
 
+    buffer *= "\t% Alias the species array (helps with debuging) - \n"
+
+    # Alias the species -
+    list_of_species::Array{SpeciesObject} = problem_object.list_of_species
+    for (index,species_object::SpeciesObject) in enumerate(list_of_species)
+
+      # Get the species symbol -
+      species_symbol = species_object.species_symbol
+
+      # Write the line -
+      buffer *= "\t$(species_symbol) = x($(index));\n"
+    end
+    buffer *= "\n"
+
     buffer *= "\t% Alias control parameters - \n"
     counter = 1
     buffer *= "\tcontrol_parameter_array = data_dictionary.control_parameter_array;\n"
@@ -422,11 +436,11 @@ function build_control_buffer(problem_object::ProblemObject)
 
 
           if (control_type == :inhibit)
-            buffer *= "\ttmp_value = $(control_actor)^(N_$(control_actor)_$(local_reaction_name))/(K_$(control_actor)_$(local_reaction_name)^(N_$(control_actor)_$(local_reaction_name))+$(control_actor)^(N_$(control_actor)_$(local_reaction_name));\n"
+            buffer *= "\ttmp_value = $(control_actor)^(N_$(control_actor)_$(local_reaction_name))/(K_$(control_actor)_$(local_reaction_name)^(N_$(control_actor)_$(local_reaction_name))+$(control_actor)^(N_$(control_actor)_$(local_reaction_name)));\n"
             buffer *= "\ttransfer_function_buffer = [transfer_function_buffer 1-tmp_value];\n"
             contains_inhibition_rules = true
           else
-            buffer *= "\ttmp_value = gain_$(control_actor)_$(local_reaction_name)*($(control_actor)^(N_$(control_actor)_$(local_reaction_name))/(K_$(control_actor)_$(local_reaction_name)^(N_$(control_actor)_$(local_reaction_name))+$(control_actor)^(N_$(control_actor)_$(local_reaction_name)));\n"
+            buffer *= "\ttmp_value = gain_$(control_actor)_$(local_reaction_name)*($(control_actor)^(N_$(control_actor)_$(local_reaction_name))/(K_$(control_actor)_$(local_reaction_name)^(N_$(control_actor)_$(local_reaction_name))+$(control_actor)^(N_$(control_actor)_$(local_reaction_name))));\n"
             buffer *= "\ttransfer_function_buffer = [transfer_function_buffer tmp_value];\n"
           end
         end

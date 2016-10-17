@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Control
 % Description: Calculate the allosteric control array at time t
-% Generated on: 2016-10-17T15:23:37.559
+% Generated on: 2016-10-17T15:39:01.478
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
@@ -40,18 +40,37 @@ function control_array = Control(t,x,rate_array,data_dictionary)
 	% Initialize the control array - 
 	control_array = ones(length(rate_array),1);
 
+	% Alias the species array (helps with debuging) - 
+	A = x(1);
+	B = x(2);
+	C = x(3);
+	E_reaction_0 = x(4);
+	E_reaction_1 = x(5);
+	E_reaction_2 = x(6);
+	E_reaction_3 = x(7);
+	E_reaction_4 = x(8);
+	E_reaction_5 = x(9);
+
 	% Alias control parameters - 
 	control_parameter_array = data_dictionary.control_parameter_array;
 	N_A_reaction_1 = control_parameter_array(1);
 	K_A_reaction_1 = control_parameter_array(2);
 	gain_A_reaction_1 = control_parameter_array(3);
+	N_B_reaction_2 = control_parameter_array(4);
+	K_B_reaction_2 = control_parameter_array(5);
 
 	% list of control statements -
 	% A activates reaction_1
+	% B inhibits reaction_2
 
 	transfer_function_buffer = [];
-	tmp_value = gain_A_reaction_1*(A^(N_A_reaction_1)/(K_A_reaction_1^(N_A_reaction_1)+A^(N_A_reaction_1));
+	tmp_value = gain_A_reaction_1*(A^(N_A_reaction_1)/(K_A_reaction_1^(N_A_reaction_1)+A^(N_A_reaction_1)));
 	transfer_function_buffer = [transfer_function_buffer tmp_value];
 	control_array(2) = max(transfer_function_buffer);
+
+	transfer_function_buffer = [];
+	tmp_value = B^(N_B_reaction_2)/(K_B_reaction_2^(N_B_reaction_2)+B^(N_B_reaction_2));
+	transfer_function_buffer = [transfer_function_buffer 1-tmp_value];
+	control_array(4) = min(transfer_function_buffer);
 
 return
