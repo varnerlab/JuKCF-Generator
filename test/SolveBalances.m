@@ -50,7 +50,7 @@ function [TSIM,X] = SolveBalances(TSTART,TSTOP,Ts,data_dictionary)
 	X = lsode(pBalanceEquations,initial_condition_array,TSIM);
 
   % Check and correct for negatives -
-  idx_negative = find(X<0);
-  X(idx_negative) = 0.0;
+  %idx_negative = find(X<0);
+  %X(idx_negative) = 0.0;
 
 return

@@ -13,6 +13,7 @@ reaction_2,[],A,C,0,inf
 reaction_3,[],C,B,0,inf
 reaction_4,[],B,[],0,inf
 reaction_5,[],C,[],0,inf
+//reaction_6,[],a,B,0,inf
 
 // --------------------------------------------------------------------- //
 // Control statements -

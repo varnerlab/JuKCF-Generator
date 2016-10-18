@@ -25,28 +25,28 @@
 % ----------------------------------------------------------------------------------- %
 % Function: DataDictionary
 % Description: Holds simulation and model parameters as key => value pairs in a Julia Dict()
-% Generated on: 2016-10-17T16:01:54.634
+% Generated on: 2016-10-17T16:49:09.043
 %
 % Input arguments:
-% time_start::Float64 => Simulation start time value (scalar) 
-% time_stop::Float64 => Simulation stop time value (scalar) 
-% time_step::Float64 => Simulation time step (scalar) 
+% time_start::Float64 => Simulation start time value (scalar)
+% time_stop::Float64 => Simulation stop time value (scalar)
+% time_step::Float64 => Simulation time step (scalar)
 %
 % Output arguments:
-% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model and simulation parameters as key => value pairs 
+% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model and simulation parameters as key => value pairs
 % ----------------------------------------------------------------------------------- %
 function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 
-	% Load the stoichiometric network from disk - 
+	% Load the stoichiometric network from disk -
 	stoichiometric_matrix = load("./Network.dat");
 
-	% Augment the stoichiometric matrix w/volume row (row of zeros) - 
+	% Augment the stoichiometric matrix w/volume row (row of zeros) -
 	[number_of_rows,number_of_cols] = size(stoichiometric_matrix);
 	stoichiometric_matrix = [stoichiometric_matrix ; zeros(1,number_of_cols)];
 
-	% Initialize the intial condition array for species - 
+	% Initialize the intial condition array for species -
 	initial_condition_array = [
-		0.0	;	% 1 1 A	(units: mM)
+		10.0	;	% 1 1 A	(units: mM)
 		0.0	;	% 2 2 B	(units: mM)
 		0.0	;	% 3 3 C	(units: mM)
 		0.0004	;	% 4 4 E_reaction_0	(units: mM)
@@ -58,9 +58,9 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		1.0	;	% 10 Volume	(units: L)
 	];
 
-	% Setup rate constant array - 
+	% Setup rate constant array -
 	rate_constant_array = [
-		25000.0	;	% 1	(units: 1/min)	reaction_0::[] --> A
+		0.0	;	% 1	(units: 1/min)	reaction_0::[] --> A
 		25000.0	;	% 2	(units: 1/min)	reaction_1::A --> B
 		25000.0	;	% 3	(units: 1/min)	reaction_1_reverse::B --> A
 		25000.0	;	% 4	(units: 1/min)	reaction_2::A --> C
@@ -75,7 +75,7 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		0.0023104906018664843	;	% 13	(units: 1/min)	E_degrade_reaction_5::E_reaction_5 --> []
 	];
 
-	% Setup saturation constant array - 
+	% Setup saturation constant array -
 	saturation_constant_array = [
 		0.05	;	% 1 K_R2_A	(units: mM)
 		0.05	;	% 2 K_R3_B	(units: mM)
@@ -85,7 +85,7 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		0.05	;	% 6 K_R7_C	(units: mM)
 	];
 
-	% Setup list of control parameters - 
+	% Setup list of control parameters -
 	control_parameter_array = [
 		1.0	;	%	 1	N_A_reaction_1
 		1.0	;	%	 2	K_A_reaction_1
@@ -94,10 +94,10 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		1.0	;	%	 5	K_B_reaction_2
 	];
 
-	% Setup the volumetric_flowrate_array - 
+	% Setup the volumetric_flowrate_array -
 	volumetric_flowrate_array = [];
 
-	% Setup the feed concentrations - 
+	% Setup the feed concentrations -
 	material_feed_concentration_array = [
 		0.0	;	% 1	 A	(units: mM)
 		0.0	;	% 2	 B	(units: mM)
