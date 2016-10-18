@@ -26,11 +26,11 @@ macro include_function_matlab(src_file_name)
 
   # path to distrubtion -
   if (is_windows() == true)
-    path_to_src_file = ".\\include\\"*src_file_name*".m"
+    path_to_src_file = "$(pwd())\\include\\"*src_file_name*".m"
   else
     path_to_src_file = "./include/"*src_file_name*".m"
   end
-  
+
   open(path_to_src_file,"r") do src_file
     for line in eachline(src_file)
       push!(src_buffer,line)
