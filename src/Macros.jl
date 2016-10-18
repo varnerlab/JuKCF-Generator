@@ -25,7 +25,12 @@ macro include_function_matlab(src_file_name)
   src_buffer::Array{AbstractString} = AbstractString[]
 
   # path to distrubtion -
-  path_to_src_file = "./include/"*src_file_name*".m"
+  if (is_windows() == true)
+    path_to_src_file = ".\\include\\"*src_file_name*".m"
+  else
+    path_to_src_file = "./include/"*src_file_name*".m"
+  end
+  
   open(path_to_src_file,"r") do src_file
     for line in eachline(src_file)
       push!(src_buffer,line)
