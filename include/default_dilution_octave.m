@@ -1,9 +1,9 @@
 function dilution_array = Dilution(t,x,data_dictionary)
 
-  # volume is the last species -
+  % volume is the last species -
   volume = x(end)
 
-  # How many species do we have?
+  % How many species do we have?
   number_of_species = length(x);
 
   % Get flow rate array et al from the data_dictionary -

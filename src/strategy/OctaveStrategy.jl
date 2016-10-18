@@ -102,18 +102,18 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
-  buffer *= "#\n"
+  buffer *= "%\n"
   buffer *= function_comment_buffer
   buffer *= "function data_dictionary = DataDictionary(time_start,time_stop,time_step)\n"
   buffer *= "\n"
   buffer *= "\t% Load the stoichiometric network from disk - \n"
-  buffer *= "\tstoichiometric_matrix = load(\"./Network.dat\");\n"
+  buffer *= "\tstoichiometric_matrix = load('Network.dat');\n"
   buffer *= "\n"
 
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
-  buffer *= "#\n"
+  buffer *= "%\n"
   buffer *= function_comment_buffer
   buffer *= "function data_dictionary = DataDictionary(time_start,time_stop,time_step)\n"
   buffer *= "\n"
@@ -313,7 +313,7 @@ function build_dilution_buffer(problem_object::ProblemObject,solver_option::Symb
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
-  buffer *= "#\n"
+  buffer *= "%\n"
   buffer *= function_comment_buffer
 
   # Include the dilution function -
@@ -347,7 +347,7 @@ function build_control_buffer(problem_object::ProblemObject)
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
-  buffer *= "#\n"
+  buffer *= "%\n"
   buffer *= function_comment_buffer
 
   # if we have *no* control statements, then generate default v's
@@ -488,7 +488,7 @@ function build_inputs_buffer(problem_object::ProblemObject)
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
-  buffer *= "#\n"
+  buffer *= "%\n"
   buffer *= function_comment_buffer
   buffer *= "function input_array = Inputs(t,x,data_dictionary)\n"
   buffer *= "\tinput_array = calculate_input_array(t,x,data_dictionary);\n"
@@ -523,7 +523,7 @@ function build_kinetics_buffer(problem_object::ProblemObject,solver_option::Symb
   # initialize the buffer -
   buffer = ""
   buffer *= header_buffer
-  buffer *= "#\n"
+  buffer *= "%\n"
   buffer *= function_comment_buffer
   buffer *= "function flux_array = Kinetics(t,x,data_dictionary)\n"
   buffer *= "\tflux_array = calculate_flux_array(t,x,data_dictionary);\n"

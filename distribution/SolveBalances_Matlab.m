@@ -47,7 +47,7 @@ function [TSIM,X] = SolveBalances(TSTART,TSTOP,Ts,data_dictionary)
 
 	% Call LSODE -
 	pBalanceEquations = @(x,t)Balances(x,t,data_dictionary);
-	X = ode15s(pBalanceEquations,initial_condition_array,TSIM);
+	[T,X] = ode15s(pBalanceEquations,TSIM,initial_condition_array);
 
   % Check and correct for negatives -
   idx_negative = find(X<0);
