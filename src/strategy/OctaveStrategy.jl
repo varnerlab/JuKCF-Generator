@@ -110,17 +110,6 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   buffer *= "\tstoichiometric_matrix = load('Network.dat');\n"
   buffer *= "\n"
 
-  # initialize the buffer -
-  buffer = ""
-  buffer *= header_buffer
-  buffer *= "%\n"
-  buffer *= function_comment_buffer
-  buffer *= "function data_dictionary = DataDictionary(time_start,time_stop,time_step)\n"
-  buffer *= "\n"
-  buffer *= "\t% Load the stoichiometric network from disk - \n"
-  buffer *= "\tstoichiometric_matrix = load(\"./Network.dat\");\n"
-  buffer *= "\n"
-
   if (reactor_option == :F)
     buffer *= "\t% Augment the stoichiometric matrix w/volume row (row of zeros) - \n"
     buffer *= "\t[number_of_rows,number_of_cols] = size(stoichiometric_matrix);\n"
