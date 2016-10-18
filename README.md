@@ -5,7 +5,7 @@ JuKCF-Generator is a code generation system for Cell Free Metabolic Models (CFMM
 
 [Wayman J, Sagar A and J. Varner (2015) Dynamic Modeling of Cell Free Biochemical Networks using Effective Kinetic Models. Processes DOI:10.3390/pr3010138](http://www.mdpi.com/2227-9717/3/1/138)
 
-### Installation and Requirments
+### Installation and Requirements
 You can download this repository as a zip file, or clone or pull it by using the command (from the command-line):
 
 	$ git pull https://github.com/varnerlab/JuKCF-Generator.git

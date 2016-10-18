@@ -26,7 +26,7 @@ function parse_commandline()
         required = true
 
       "-s"
-        help = "ODE solver (Default: LSODE)"
+        help = "ODE solver (Default: ODE15s)"
         arg_type = Symbol
         default = :ODE15s
 
