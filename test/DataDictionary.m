@@ -21,11 +21,11 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 % THE SOFTWARE.
 % ----------------------------------------------------------------------------------- %
-#
+%
 % ----------------------------------------------------------------------------------- %
 % Function: DataDictionary
 % Description: Holds simulation and model parameters as key => value pairs in a Julia Dict()
-% Generated on: 2016-10-18T10:21:44.729
+% Generated on: 2016-10-18T12:56:37.786
 %
 % Input arguments:
 % time_start::Float64 => Simulation start time value (scalar) 
@@ -38,7 +38,7 @@
 function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 
 	% Load the stoichiometric network from disk - 
-	stoichiometric_matrix = load("./Network.dat");
+	stoichiometric_matrix = load('Network.dat');
 
 	% Augment the stoichiometric matrix w/volume row (row of zeros) - 
 	[number_of_rows,number_of_cols] = size(stoichiometric_matrix);
@@ -94,20 +94,24 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 		1.0	;	% 5 K_B_reaction_2	(units: nM)
 	];
 
+	% How many feeds do we have?
+	number_of_reactor_feed_streams = 5;
+
 	% Setup the volumetric_flowrate_array (units: L/min) - 
 	volumetric_flowrate_array = [];
 
 	% Setup the feed concentrations - 
 	material_feed_concentration_array = [
-		0.0	;	% 1 A	(units: mM)
-		0.0	;	% 2 B	(units: mM)
-		0.0	;	% 3 C	(units: mM)
-		0.0	;	% 4 E_reaction_0	(units: mM)
-		0.0	;	% 5 E_reaction_1	(units: mM)
-		0.0	;	% 6 E_reaction_2	(units: mM)
-		0.0	;	% 7 E_reaction_3	(units: mM)
-		0.0	;	% 8 E_reaction_4	(units: mM)
-		0.0	;	% 9 E_reaction_5	(units: mM)
+	% F1   F2   F3   F4   F5  
+	 0.0  0.0  0.0  0.0  0.0 	;	% 1 A (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 2 B (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 3 C (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 4 E_reaction_0 (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 5 E_reaction_1 (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 6 E_reaction_2 (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 7 E_reaction_3 (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 8 E_reaction_4 (units: mM)
+	 0.0  0.0  0.0  0.0  0.0 	;	% 9 E_reaction_5 (units: mM)
 	];
 
 	% =============================== DO NOT EDIT BELOW THIS LINE ============================== %
@@ -117,6 +121,7 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 	data_dictionary.stoichiometric_matrix = stoichiometric_matrix;
 	data_dictionary.volumetric_flowrate_array = volumetric_flowrate_array;
 	data_dictionary.material_feed_concentration_array = material_feed_concentration_array;
+	data_dictionary.number_of_reactor_feed_streams = number_of_reactor_feed_streams;
 	data_dictionary.rate_constant_array = rate_constant_array;
 	data_dictionary.saturation_constant_array = saturation_constant_array;
 	data_dictionary.control_parameter_array = control_parameter_array;

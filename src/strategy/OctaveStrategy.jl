@@ -93,6 +93,7 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   default_saturation_constant = default_parameter_dictionary["default_saturation_constant"]
   default_protein_half_life = parse(Float64,default_parameter_dictionary["default_protein_half_life"])
   default_rate_constant = parse(Float64,default_parameter_dictionary["default_enzyme_kcat"])
+  default_number_of_feed_streams = parse(Int,default_parameter_dictionary["default_number_of_feed_streams"])
   default_upper_bound = default_rate_constant*enzyme_initial_condition
 
   @show default_upper_bound,default_rate_constant,enzyme_initial_condition
@@ -239,19 +240,45 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
 
   buffer *= "\n"
   if (reactor_option == :F)
+
+    # How many feed streams do we have?
+    number_of_feed_streams = default_number_of_feed_streams
+
+
+    # Write the buffer -
+    buffer *= "\t% How many feeds do we have?\n"
+    buffer *= "\tnumber_of_reactor_feed_streams = $(number_of_feed_streams);\n"
+    buffer *= "\n"
     buffer *= "\t% Setup the volumetric_flowrate_array (units: L/min) - \n"
     buffer *= "\tvolumetric_flowrate_array = [];\n"
     buffer *= "\n"
     buffer *= "\t% Setup the feed concentrations - \n"
     buffer *= "\tmaterial_feed_concentration_array = [\n"
+    buffer *= "\t"
+    buffer *= "%"
+    for feed_stream_index = 1:number_of_feed_streams
+      buffer *= " F$(feed_stream_index)  "
+    end
+    buffer *= "\n"
+    buffer *= "\t"
+
     for (index,species_object) in enumerate(list_of_species)
 
       # what is the species symbol?
       species_symbol = species_object.species_symbol
 
-      buffer *= "\t\t0.0\t;\t% $(index) $(species_symbol)\t(units: mM)\n"
+      for feed_stream_index = 1:number_of_feed_streams
+
+          buffer *= " 0.0 "
+      end
+
+      buffer *= "\t;\t% $(index) $(species_symbol) (units: mM)\n"
+      buffer *= "\t"
+
     end
-    buffer *= "\t];\n"
+
+
+    buffer *= "];\n"
   end
 
   buffer *= "\n"
@@ -264,9 +291,11 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   if (reactor_option == :F)
     buffer *= "\tdata_dictionary.volumetric_flowrate_array = volumetric_flowrate_array;\n"
     buffer *= "\tdata_dictionary.material_feed_concentration_array = material_feed_concentration_array;\n"
+    buffer *= "\tdata_dictionary.number_of_reactor_feed_streams = number_of_reactor_feed_streams;\n"
   elseif (reactor_option == :B)
     buffer *= "\tdata_dictionary.volumetric_flowrate_array = [];\n"
     buffer *= "\tdata_dictionary.material_feed_concentration_array = [];\n"
+    buffer *= "\tdata_dictionary.number_of_reactor_feed_streams = 0;\n"
   end
 
   buffer *= "\tdata_dictionary.rate_constant_array = rate_constant_array;\n"

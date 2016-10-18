@@ -21,11 +21,11 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 % THE SOFTWARE.
 % ----------------------------------------------------------------------------------- %
-#
+%
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-10-18T10:21:44.892
+% Generated on: 2016-10-18T12:56:37.947
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
