@@ -24,7 +24,7 @@
 %
 % ----------------------------------------------------------------------------------- %
 % Balances: Evaluates model equations given time, state and the data_dictionary.
-% Type: JuKCF-Octave
+% Type: JuKCF-Matlab
 % Version: 1.0
 %
 % Input arguments:
@@ -35,7 +35,7 @@
 % Return arguments:
 % dxdt - derivative array at current time step
 % ----------------------------------------------------------------------------------- %
-function dxdt = Balances(x,t,data_dictionary)
+function dxdt = Balances(t,x,data_dictionary)
 
   % Before we do anything, check for negatives -
   idx_negative = find(x<0);
