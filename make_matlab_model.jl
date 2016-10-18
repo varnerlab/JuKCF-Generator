@@ -28,7 +28,7 @@ function parse_commandline()
       "-s"
         help = "ODE solver (Default: LSODE)"
         arg_type = Symbol
-        default = :LSODE
+        default = :ODE15s
 
       "-r"
         help = "Reactor configuration (B = Batch, F = Fedbatch, C = Continous)"
@@ -92,7 +92,8 @@ function main()
   # Transfer distrubtion files to the output -
   transfer_distribution_file("./distribution","Balances_Matlab.m",path_to_output_file,"Balances.m")
   transfer_distribution_file("./distribution","SolveBalances_Matlab.m",path_to_output_file,"SolveBalances.m")
-
+  transfer_distribution_file("./distribution","Driver.m",path_to_output_file,"Driver.m")
+  transfer_distribution_file("./distribution","README_MATLAB.md",path_to_output_file,"README.md")
 end
 
 main()

@@ -92,6 +92,7 @@ function main()
   transfer_distribution_file("./distribution","Balances.m",path_to_output_file,"Balances.m")
   transfer_distribution_file("./distribution","SolveBalances.m",path_to_output_file,"SolveBalances.m")
   transfer_distribution_file("./distribution","Driver.m",path_to_output_file,"Driver.m")
+  transfer_distribution_file("./distribution","README_OCTAVE.md",path_to_output_file,"README.md")
 end
 
 main()
