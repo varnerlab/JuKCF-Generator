@@ -1,7 +1,9 @@
 ## Kinetic Cell Free Models Generator in Julia (JuKCF-Generator)
 
 ### Introduction ###
-JuKCF-Generator is a code generation system for Cell Free Metabolic Models (CFMM) written in the Julia programming language. JuKCF-Generator transforms a simple comma/space delimited flat-file into fully commented cell free kinetic model code in the MATLAB, Octave or Julia programming languages. 
+JuKCF-Generator is a code generation system for Cell Free Metabolic Models (CFMM) written in the [Julia](http://julialang.org) programming language. JuKCF-Generator transforms a simple comma/space delimited flat-file into fully commented cell free kinetic model code in the [MATLAB](https://www.mathworks.com/products/matlab/), [Octave](https://www.gnu.org/software/octave/) or [Julia](http://julialang.org) programming languages. The JuKCF-Generator framework generates a dynamic model of cell free metabolism using the hybrid modeling framework of Wayman et al:
+
+[Wayman J, Sagar A and J. Varner (2015) Dynamic Modeling of Cell Free Biochemical Networks using Effective Kinetic Models. Processes DOI:10.3390/pr3010138](http://www.mdpi.com/2227-9717/3/1/138)
 
 ### Installation and Requirments
 You can download this repository as a zip file, or clone or pull it by using the command (from the command-line):
@@ -14,7 +16,7 @@ or
 
 To execute a code generation job, Julia must be installed on your machine along with the Julia packages ``ArgParse`` and ``JSON``. 
 Julia can be downloaded/installed on any platform. 
-The required Julia packages can be installed by executing the commands:
+The required [Julia](http://julialang.org) packages can be installed by executing the commands:
 
 	julia> Pkg.add("ArgParse")
 
@@ -35,7 +37,7 @@ Argument | Required | Default | Description
 --- | --- | --- | ---
 -m | Yes	| none | Path to model input file
 -o | No	| current directory | Path where files are written
--s | No	| ODE15s, LSODE or ODE | ODE solver used to solve the CFMM
+-s | No	| [ODE15s](https://www.mathworks.com/help/matlab/ref/ode15s.html), [LSODE](https://www.gnu.org/software/octave/doc/v4.0.1/Ordinary-Differential-Equations.html) or [ODE](https://github.com/JuliaDiffEq/ODE.jl) | ODE solver used to solve the CFMM
 -r | No	| F = Fed batch | Reactor configuration (F = Fed batch, B = batch and C = Continous)
 
 ### Can we test the installation? ###
