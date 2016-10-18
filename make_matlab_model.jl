@@ -33,7 +33,7 @@ function parse_commandline()
       "-r"
         help = "Reactor configuration (B = Batch, F = Fedbatch, C = Continous)"
         arg_type = Symbol
-        default = :B
+        default = :F
     end
 
     # return a dictionary w/args -
@@ -65,13 +65,9 @@ function main()
   program_component_data_dictionary = build_data_dictionary_buffer_matlab(problem_object,solver_type,reactor_type)
   push!(component_set,program_component_data_dictionary)
 
-  # Write the dilution function if this is a Fedbatch -
-  if (reactor_type == :F)
-
-    # Write the dilution -
-    program_component_dilution = build_dilution_buffer_matlab(problem_object,solver_type,reactor_type)
-    push!(component_set,program_component_dilution)
-  end
+  # Write the dilution -
+  program_component_dilution = build_dilution_buffer_matlab(problem_object,solver_type,reactor_type)
+  push!(component_set,program_component_dilution)
 
   # Write the Kinetics -
   program_component_kinetics = build_kinetics_buffer_matlab(problem_object,solver_type)

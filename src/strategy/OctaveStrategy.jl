@@ -234,13 +234,13 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
       control_type = control_statement_object.control_type
       control_target = control_statement_object.control_target
 
-      buffer *= "\t\t1.0\t;\t%\t $(counter)\tN_$(control_actor)_$(control_target)\n"
+      buffer *= "\t\t1.0\t;\t% $(counter) N_$(control_actor)_$(control_target)\t(units: dimensionless)\n"
       counter = counter + 1
-      buffer *= "\t\t1.0\t;\t%\t $(counter)\tK_$(control_actor)_$(control_target)\n"
+      buffer *= "\t\t1.0\t;\t% $(counter) K_$(control_actor)_$(control_target)\t(units: nM)\n"
       counter = counter + 1
 
       if (control_type == :activate)
-        buffer *= "\t\t1.0\t;\t%\t $(counter)\tgain_$(control_actor)_$(control_target)\n"
+        buffer *= "\t\t1.0\t;\t% $(counter) gain_$(control_actor)_$(control_target)\t(units: dimensionless)\n"
         counter = counter + 1
       end
     end
@@ -250,7 +250,7 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
 
   buffer *= "\n"
   if (reactor_option == :F)
-    buffer *= "\t% Setup the volumetric_flowrate_array - \n"
+    buffer *= "\t% Setup the volumetric_flowrate_array (units: L/min) - \n"
     buffer *= "\tvolumetric_flowrate_array = [];\n"
     buffer *= "\n"
     buffer *= "\t% Setup the feed concentrations - \n"
@@ -275,6 +275,9 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
   if (reactor_option == :F)
     buffer *= "\tdata_dictionary.volumetric_flowrate_array = volumetric_flowrate_array;\n"
     buffer *= "\tdata_dictionary.material_feed_concentration_array = material_feed_concentration_array;\n"
+  elseif (reactor_option == :B)
+    buffer *= "\tdata_dictionary.volumetric_flowrate_array = [];\n"
+    buffer *= "\tdata_dictionary.material_feed_concentration_array = [];\n"
   end
 
   buffer *= "\tdata_dictionary.rate_constant_array = rate_constant_array;\n"

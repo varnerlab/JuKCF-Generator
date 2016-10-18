@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-10-17T16:49:09.127
+% Generated on: 2016-10-18T05:05:18.519
 %
 % Input arguments:
 % t::Float64 => Current time value (scalar) 
@@ -59,12 +59,16 @@ function dilution_array = Dilution(t,x,data_dictionary)
   % initialize the diltion array -
   dilution_array = zeros(number_of_species,1);
 
-  % Compute -
-  for species_index = 1:number_of_species - 1
-    dilution_array(species_index,1) = dilution_rate*(feed_composition_array(species_index) - x(species_index));
-  end
+  % Check for an empty feed composition array, if empty skip this block -
+  if (isempty(feed_composition_array) == false)
 
-  % Last element is F -
-  dilution_array(end,1) = flow_rate;
+    % Compute -
+    for species_index = 1:number_of_species - 1
+      dilution_array(species_index,1) = dilution_rate*(feed_composition_array(species_index) - x(species_index));
+    end
+
+    % Last element is F -
+    dilution_array(end,1) = flow_rate;
+  end
 
 return
