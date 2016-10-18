@@ -37,6 +37,10 @@
 % ----------------------------------------------------------------------------------- %
 function dxdt = Balances(x,t,data_dictionary)
 
+  % Before we do anything, check for negatives -
+  idx_negative = find(x<0);
+  x(idx_negative) = 0.0;
+
   % Get the stoichiometric_matrix -
   stoichiometric_matrix = data_dictionary.stoichiometric_matrix;
 
@@ -52,7 +56,7 @@ function dxdt = Balances(x,t,data_dictionary)
   % Modify the rate array -
   rate_array = rate_array.*control_array;
 
-  # calculate the dxdt for chemical species -
+  % Calculate the dxdt for chemical species -
   dxdt = stoichiometric_matrix*rate_array+dilution_array;
 
 return

@@ -25,7 +25,7 @@
 % ----------------------------------------------------------------------------------- %
 % Function: DataDictionary
 % Description: Holds simulation and model parameters as key => value pairs in a Julia Dict()
-% Generated on: 2016-10-18T05:05:18.433
+% Generated on: 2016-10-18T05:20:08.918
 %
 % Input arguments:
 % time_start::Float64 => Simulation start time value (scalar) 
@@ -99,15 +99,15 @@ function data_dictionary = DataDictionary(time_start,time_stop,time_step)
 
 	% Setup the feed concentrations - 
 	material_feed_concentration_array = [
-		0.0	;	% 1	 A	(units: mM)
-		0.0	;	% 2	 B	(units: mM)
-		0.0	;	% 3	 C	(units: mM)
-		0.0	;	% 4	 E_reaction_0	(units: mM)
-		0.0	;	% 5	 E_reaction_1	(units: mM)
-		0.0	;	% 6	 E_reaction_2	(units: mM)
-		0.0	;	% 7	 E_reaction_3	(units: mM)
-		0.0	;	% 8	 E_reaction_4	(units: mM)
-		0.0	;	% 9	 E_reaction_5	(units: mM)
+		0.0	;	% 1 A	(units: mM)
+		0.0	;	% 2 B	(units: mM)
+		0.0	;	% 3 C	(units: mM)
+		0.0	;	% 4 E_reaction_0	(units: mM)
+		0.0	;	% 5 E_reaction_1	(units: mM)
+		0.0	;	% 6 E_reaction_2	(units: mM)
+		0.0	;	% 7 E_reaction_3	(units: mM)
+		0.0	;	% 8 E_reaction_4	(units: mM)
+		0.0	;	% 9 E_reaction_5	(units: mM)
 	];
 
 	% =============================== DO NOT EDIT BELOW THIS LINE ============================== %

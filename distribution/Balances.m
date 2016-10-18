@@ -37,6 +37,10 @@
 % ----------------------------------------------------------------------------------- %
 function dxdt = Balances(x,t,data_dictionary)
 
+  % Before we do anything, check for negatives -
+  idx_negative = find(x<0);
+  x(idx_negative) = 0.0;
+
   % Get the stoichiometric_matrix -
   stoichiometric_matrix = data_dictionary.stoichiometric_matrix;
 
