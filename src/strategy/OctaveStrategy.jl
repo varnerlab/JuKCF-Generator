@@ -260,7 +260,7 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
       # what is the species symbol?
       species_symbol = species_object.species_symbol
 
-      buffer *= "\t\t0.0\t;\t% $(index)\t $(species_symbol)\t(units: mM)\n"
+      buffer *= "\t\t0.0\t;\t% $(index) $(species_symbol)\t(units: mM)\n"
     end
     buffer *= "\t];\n"
   end

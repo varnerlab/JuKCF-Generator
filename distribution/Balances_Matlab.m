@@ -52,7 +52,7 @@ function dxdt = Balances(t,x,data_dictionary)
   % Modify the rate array -
   rate_array = rate_array.*control_array;
 
-  # calculate the dxdt for chemical species -
+  % Calculate the dxdt for chemical species -
   dxdt = stoichiometric_matrix*rate_array+dilution_array;
 
 return
