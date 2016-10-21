@@ -223,7 +223,9 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
       control_actor = control_statement_object.control_actor
       control_type = control_statement_object.control_type
       control_target = control_statement_object.control_target
+      original_sentence = control_statement_object.original_sentence
 
+      buffer *= "\t\t% $(original_sentence) \n"
       buffer *= "\t\t1.0\t;\t% $(counter) N_$(control_actor)_$(control_target)\t(units: dimensionless)\n"
       counter = counter + 1
       buffer *= "\t\t1.0\t;\t% $(counter) K_$(control_actor)_$(control_target)\t(units: nM)\n"
@@ -233,6 +235,9 @@ function build_data_dictionary_buffer(problem_object::ProblemObject,solver_optio
         buffer *= "\t\t1.0\t;\t% $(counter) gain_$(control_actor)_$(control_target)\t(units: dimensionless)\n"
         counter = counter + 1
       end
+
+      buffer *= "\n"
+
     end
     buffer *= "\t];\n"
   end
@@ -325,7 +330,7 @@ function build_dilution_buffer(problem_object::ProblemObject,solver_option::Symb
   header_buffer = build_copyright_header_buffer(problem_object)
 
   # get the comment buffer -
-  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["kinetics_function"]
+  comment_header_dictionary = problem_object.configuration_dictionary["function_comment_dictionary"]["dilution_function"]
   function_comment_buffer = build_function_header_buffer(comment_header_dictionary)
 
   # initialize the buffer -

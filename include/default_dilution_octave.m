@@ -15,9 +15,9 @@ function species_dilution_array = Dilution(t,x,data_dictionary)
   interpolated_flow_rate_array = zeros(number_of_reactor_feed_streams,1);
 
   % What is the current dilution rate?
+  dilution_rate_array = zeros(number_of_reactor_feed_streams,1);
   if (isempty(flowrate_array) == false && number_of_reactor_feed_streams>0)
 
-    dilution_rate_array = zeros(number_of_reactor_feed_streams,1);
     for feed_stream_index = 1:number_of_reactor_feed_streams
 
       % interpolate, then calc the dilution rate -
