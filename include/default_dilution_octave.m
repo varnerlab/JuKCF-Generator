@@ -1,7 +1,7 @@
-function dilution_array = Dilution(t,x,data_dictionary)
+function species_dilution_array = Dilution(t,x,data_dictionary)
 
   % volume is the last species -
-  volume = x(end)
+  volume = x(end);
 
   % How many species do we have?
   number_of_species = length(x);
@@ -12,7 +12,7 @@ function dilution_array = Dilution(t,x,data_dictionary)
   number_of_reactor_feed_streams = data_dictionary.number_of_reactor_feed_streams;
 
   % Initialize the interpolated flow rate array -
-  interpolated_flow_rate_array = zeros(number_of_reactor_feed_streams,1)
+  interpolated_flow_rate_array = zeros(number_of_reactor_feed_streams,1);
 
   % What is the current dilution rate?
   if (isempty(flowrate_array) == false && number_of_reactor_feed_streams>0)

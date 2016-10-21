@@ -53,10 +53,13 @@ function dxdt = Balances(x,t,data_dictionary)
   % Call the dilution function -
   dilution_array = Dilution(t,x,data_dictionary);
 
+  % Call inputs function -
+  inputs_array = Inputs(t,x,data_dictionary);
+
   % Modify the rate array -
   rate_array = rate_array.*control_array;
 
   % Calculate the dxdt for chemical species -
-  dxdt = stoichiometric_matrix*rate_array+dilution_array;
+  dxdt = stoichiometric_matrix*rate_array+dilution_array+inputs_array;
 
 return

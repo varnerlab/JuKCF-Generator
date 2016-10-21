@@ -25,20 +25,20 @@
 % ----------------------------------------------------------------------------------- %
 % Function: Kinetics
 % Description: Calculate the flux array at time t
-% Generated on: 2016-10-18T12:56:37.873
+% Generated on: 2016-10-18T16:50:29.782
 %
 % Input arguments:
-% t::Float64 => Current time value (scalar) 
-% x::Array{Float64,1} => State array (number_of_species x 1) 
-% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters 
+% t::Float64 => Current time value (scalar)
+% x::Array{Float64,1} => State array (number_of_species x 1)
+% data_dictionary::Dict{AbstractString,Any} => Dictionary holding model parameters
 %
 % Output arguments:
-% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t 
+% flux_array::Array{Float64,1} => Flux array (number_of_rates x 1) at time t
 % ----------------------------------------------------------------------------------- %
-function dilution_array = Dilution(t,x,data_dictionary)
+function species_dilution_array = Dilution(t,x,data_dictionary)
 
   % volume is the last species -
-  volume = x(end)
+  volume = x(end);
 
   % How many species do we have?
   number_of_species = length(x);
@@ -49,7 +49,7 @@ function dilution_array = Dilution(t,x,data_dictionary)
   number_of_reactor_feed_streams = data_dictionary.number_of_reactor_feed_streams;
 
   % Initialize the interpolated flow rate array -
-  interpolated_flow_rate_array = zeros(number_of_reactor_feed_streams,1)
+  interpolated_flow_rate_array = zeros(number_of_reactor_feed_streams,1);
 
   % What is the current dilution rate?
   if (isempty(flowrate_array) == false && number_of_reactor_feed_streams>0)
