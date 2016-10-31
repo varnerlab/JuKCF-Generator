@@ -40,7 +40,7 @@ function species_dilution_array = Dilution(t,x,data_dictionary)
     for species_index = 1:number_of_species - 1
       tmp_array = [];
       for feed_stream_index = 1:number_of_reactor_feed_streams
-        tmp_value = dilution_rate_array(feed_stream_index,1)*(feed_composition_array(species_index) - x(species_index));
+        tmp_value = dilution_rate_array(feed_stream_index,1)*(feed_composition_array(species_index,feed_stream_index) - x(species_index));
         tmp_array = [tmp_array ; tmp_value];
       end
 
